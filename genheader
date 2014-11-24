@@ -1,0 +1,61 @@
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+
+my $infile = shift;
+
+open(my $lichndl, "<", "LICENSE");
+print("/*\n");
+foreach my $line (<$lichndl>) {
+    print(" * ");
+    print($line);
+}
+close($lichndl);
+print(" */\n\n");
+
+print("#ifndef SHUFF_H\n");
+print("#define SHUFF_H\n\n");
+print("#ifdef _MSC_VER\n");
+print("#define inline __inline\n");
+print("#endif\n\n");
+print("#ifdef __cplusplus\n");
+print("extern \"C\" {\n");
+print("#endif\n\n");
+
+open(my $hndl, "<", $infile);
+
+my @protos;
+my $proto = "";
+my $inproto = 0;
+
+foreach my $line (<$hndl>) {
+    chomp($line);
+    if ($line =~ /void/) {
+        $inproto = 1;
+    } elsif ($line =~ /^{$/) {
+        $inproto = 0;
+        $proto .= ";";
+        push(@protos, $proto);
+        $proto = "";
+    }
+    if ($inproto) {
+        $proto .= "\n$line";
+    }
+
+    $line =~ s/^(void.+?)\(/static inline $1_inline(/;
+    if ($inproto && !($line =~ /void/)) {
+        print(" " x 21);
+    }
+    print("$line\n");
+}
+close($hndl);
+
+foreach my $prot (@protos) {
+    print("$prot\n")
+}
+
+print("\n#ifdef __cplusplus\n");
+print("}\n");
+print("#endif\n\n");
+print("#endif\n")

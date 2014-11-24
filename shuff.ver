@@ -1,0 +1,5 @@
+SHUFF_1 {
+    global: shuff_pack;
+            shuff_unpack;
+    local: *;
+};
