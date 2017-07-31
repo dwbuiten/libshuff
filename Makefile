@@ -1,5 +1,5 @@
 DESTDIR=/usr/local
-CFLAGS=-Wall -Wextra -g -fPIC
+CFLAGS=-Wall -Wextra -g -O3 -fPIC
 
 all: shuff.h libshuff.so
 
@@ -10,7 +10,7 @@ libshuff.so: shuff.o
 	$(CC) -Wl,--version-script,shuff.ver -shared $^ -o libshuff.so.1
 
 clean:
-	@rm -f libshuff.so.1 shuff.o shuff.h
+	@rm -f libshuff.so.1 shuff.o shuff.h unit
 
 install-header: shuff.h
 	install -m 644 shuff.h $(DESTDIR)/include
@@ -19,6 +19,10 @@ install: all
 	install -m 644 shuff.h $(DESTDIR)/include
 	install -m 755 libshuff.so.1 $(DESTDIR)/lib
 	ln -s libshuff.so.1 $(DESTDIR)/lib/libshuff.so
+
+check: shuff.h
+	$(CC) -g -O0 -Wall -Wextra -o unit -I. unit.c
+	./unit
 
 uninstall-header:
 	@rm -v $(DESTDIR)/include/shuff.h
