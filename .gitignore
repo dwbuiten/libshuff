@@ -1,3 +1,5 @@
 shuff.h
 libshuff.so.*
 *.o
+*.pc
+unit

@@ -1,0 +1,14 @@
+prefix=$PREFIX
+exec_prefix=${prefix}
+libdir=${prefix}/lib
+includedir=${prefix}/include
+
+Name: shuff
+Description: Library to shuffle video plane data around.
+Version: 0.1
+Requires:
+Requires.private:
+Conflicts:
+Libs: -L${libdir} -lshuff
+Libs.private:
+Cflags: -I${includedir}
